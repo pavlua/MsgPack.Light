@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "msgpack.light", "src\msgpack.light\msgpack.light.csproj", "{04D4E761-F756-43D8-B31C-79B1B0671243}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pavlua.test.msgpack.light", "src\msgpack.light\pavlua.test.msgpack.light.csproj", "{04D4E761-F756-43D8-B31C-79B1B0671243}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "msgpack.light.tests", "tests\msgpack.light.tests\msgpack.light.tests.csproj", "{4DD9051D-548F-4E11-86EA-746F443CEA67}"
 EndProject
