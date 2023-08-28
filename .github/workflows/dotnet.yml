@@ -42,6 +42,7 @@ jobs:
     #- name: Check prerelease or not
     #  run: echo "PreRelease=if [ {{ env.GITHUB_EVENT_NAME}} -eq "pull_request" ] || [ {{ env.GITHUB_EVENT_NAME}} -ne "refs/heads/gh-actions"] then 1 else 0 fi" >> $GITHUB_ENV
     - name: Calc nuget package version
+      id: calc-nuget-version
       run: echo "NugetPackageVersion=git describe --tags --abbrev=${{ env.PreRelease }}" >> $GITHUB_ENV
     - name: Pack nuget
       run: dotnet pack -c Release -v minimal -o ${{ env.NuGetDirectory }} -p:PackageVersion=${{ env.NugetPackageVersion }}
