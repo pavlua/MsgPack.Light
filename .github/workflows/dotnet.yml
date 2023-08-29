@@ -8,7 +8,6 @@ on:
 
 env:
   NuGetDirectory: ${{ github.workspace }}/nuget
-  PreRelease: 1
 
 jobs:
   build_and_test:
@@ -39,11 +38,9 @@ jobs:
         fetch-depth: 0
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
-    #- name: Check prerelease or not
-    #  run: echo "PreRelease=if [ {{ env.GITHUB_EVENT_NAME}} -eq "pull_request" ] || [ {{ env.GITHUB_EVENT_NAME}} -ne "refs/heads/gh-actions"] then 1 else 0 fi" >> $GITHUB_ENV
     - name: Calc nuget package version
       id: calc-nuget-version
-      run: echo "NugetPackageVersion=$(git describe --tags --abbrev=${{ env.PreRelease }})" >> $GITHUB_ENV
+      run: echo "NugetPackageVersion=$(git describe --tags --abbrev=1 | sed 's/-/./')" >> $GITHUB_ENV
     - name: Pack nuget
       run: dotnet pack -c Release -v minimal -o ${{ env.NuGetDirectory }} -p:PackageVersion=${{ env.NugetPackageVersion }}
     - uses: actions/upload-artifact@v3
@@ -54,7 +51,6 @@ jobs:
         path: ${{ env.NuGetDirectory }}/*.nupkg
 
   deploy_nuget:
-    #if: github.event_name != 'pull_request' && github.ref == 'refs/heads/gh-actions' # only for test
     runs-on: ubuntu-22.04
     needs: [ create_nuget, build_and_test ]
     steps:
