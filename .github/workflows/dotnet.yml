@@ -1,8 +1,6 @@
 name: Build, Test & Publish nuget
 
 on:
-  push:
-    tags: [ "*.*.*" ]
   pull_request:
     types: [ opened, synchronize ]
     branches: [ "master", "gh-actions" ] # only for test
