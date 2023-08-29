@@ -2,10 +2,8 @@ name: Bump version
 
 on:
   pull_request:
-    types:
-      - closed
-    branches:
-      - [ "master", "gh-actions" ] # only for test
+    types: [ closed ]
+    branches: [ "master", "gh-actions" ] # only for test
 
 jobs:
   bump_version_and_add_tag:
