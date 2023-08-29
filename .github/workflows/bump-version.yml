@@ -1,4 +1,5 @@
 name: Bump version
+
 on:
   pull_request:
     types:
@@ -7,7 +8,7 @@ on:
       - [ "master", "gh-actions" ] # only for test
 
 jobs:
-  build:
+  bump_version_and_add_tag:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-22.04
     permissions:
@@ -17,7 +18,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: '0'
-
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
