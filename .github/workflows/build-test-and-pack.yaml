@@ -1,12 +1,12 @@
-name: Build, Test & Publish nuget
+name: Build, Test & Pack nuget
 
 on:
-  pull_request:
-    types: [ opened, synchronize ]
-    branches: [ "master", "gh-actions" ] # only for test
-
-env:
-  NuGetDirectory: ${{ github.workspace }}/nuget
+  workflow_call:
+    inputs:
+      NuGetDirectory:
+        description: 'Path to Nuget directory'
+        type: string
+        required: true
 
 jobs:
   build_test_and_pack:
@@ -33,23 +33,10 @@ jobs:
         id: calc-nuget-version
         run: echo "NugetPackageVersion=$(git describe --tags --abbrev=1 | sed 's/-/./')" >> $GITHUB_ENV
       - name: Pack nuget
-        run: dotnet pack -c Release --no-build -v minimal -o ${{ env.NuGetDirectory }} -p:PackageVersion=${{ env.NugetPackageVersion }}
+        run: dotnet pack -c Release --no-build -v minimal -o ${{ inputs.NuGetDirectory }} -p:PackageVersion=${{ env.NugetPackageVersion }}
       - uses: actions/upload-artifact@v3
         with:
           name: nuget
           if-no-files-found: error
           retention-days: 7
-          path: ${{ env.NuGetDirectory }}/*.nupkg
-
-  deploy_nuget:
-    runs-on: ubuntu-22.04
-    needs: [ build_test_and_pack ]
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: nuget
-          path: ${{ env.NuGetDirectory }}
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-      - name: Publish NuGet package
-        run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
+          path: ${{ inputs.NuGetDirectory }}/*.nupkg

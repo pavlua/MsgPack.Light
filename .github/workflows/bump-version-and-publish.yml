@@ -1,0 +1,47 @@
+name: Bump version and publish release nuget
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ "master", "gh-actions" ] # only for test
+
+env:
+  NuGetDirectory: ${{ github.workspace }}/nuget
+
+jobs:
+  bump_version_and_add_tag:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+          WITH_V: false
+          DEFAULT_BUMP: patch
+
+  build_test_and_pack:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    needs: [ bump_version_and_add_tag ]
+    steps:
+      - name: Build, test and pack
+        uses: ./.github/workflows/build-test-and-pack.yml
+        with:
+          NuGetDirectory: ${{ env.NuGetDirectory }}
+
+  deploy_nuget:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    needs: [ build_test_and_pack ]
+    steps:
+      - name: Deploy nuget
+        uses: ./.github/workflows/deploy-nuget.yml
+        with:
+          NuGetDirectory: ${{ env.NuGetDirectory }}

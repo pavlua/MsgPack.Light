@@ -1,0 +1,27 @@
+name: Build, Test & Publish nuget
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+    branches: [ "master", "gh-actions" ] # only for test
+
+env:
+  NuGetDirectory: ${{ github.workspace }}/nuget
+
+jobs:
+  build_test_and_pack:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Build, test and pack
+        uses: ./.github/workflows/build-test-and-pack.yml
+        with:
+          NuGetDirectory: ${{ env.NuGetDirectory }}
+
+  deploy_nuget:
+    runs-on: ubuntu-22.04
+    needs: [ build_test_and_pack ]
+    steps:
+      - name: Deploy nuget
+        uses: ./.github/workflows/deploy-nuget.yml
+        with:
+          NuGetDirectory: ${{ env.NuGetDirectory }}

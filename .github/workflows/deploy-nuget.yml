@@ -1,0 +1,22 @@
+name: Deploy nuget
+
+on:
+  workflow_call:
+    inputs:
+      NuGetDirectory:
+        description: 'Path to Nuget directory'
+        type: string
+        required: true
+
+jobs:
+  deploy_nuget:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: nuget
+          path: ${{ inputs.NuGetDirectory }}
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+      - name: Publish NuGet package
+        run: dotnet nuget push ${{ inputs.NuGetDirectory }}/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
