@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "master" ]
     tags: ['*']
-  pull_request:
+  pull_request_target:
     types: [ opened, synchronize ]
     branches: [ "master" ]
 
