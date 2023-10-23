@@ -12,9 +12,7 @@ env:
 jobs:
   download_and_publish_nuget:
     runs-on: ubuntu-latest
-    if: >
-      github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
     - name: 'Download zipped nuget artifact'
       uses: actions/github-script@v3.1.0
