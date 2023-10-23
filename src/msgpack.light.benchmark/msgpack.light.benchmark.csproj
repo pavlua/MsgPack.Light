@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\msgpack.light\msgpack.light.csproj" />
+    <ProjectReference Include="..\msgpack.light\pavlua.test.msgpack.light.csproj" />
   </ItemGroup>
 
 </Project>

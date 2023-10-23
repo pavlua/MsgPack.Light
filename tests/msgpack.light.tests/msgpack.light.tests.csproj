@@ -22,6 +22,6 @@
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Shouldly" />
-    <ProjectReference Include="..\..\src\msgpack.light\msgpack.light.csproj" />
+    <ProjectReference Include="..\..\src\msgpack.light\pavlua.test.msgpack.light.csproj" />
   </ItemGroup>
 </Project>
